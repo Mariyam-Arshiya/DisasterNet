@@ -1,296 +1,194 @@
-<<<<<<< HEAD
-# DisasterNet
 
-🚀 DisasterNet
+DisasterNet
 
-Offline-first, graph-powered disaster coordination platform that works even when networks fail
+DisasterNet — coordination doesn't stop when the signal does.
 
 📌 Problem & Domain
 
-Disaster response systems today fail in the exact moment they are needed most — when connectivity breaks.
+In the first hours after a disaster, cellular networks and Wi-Fi infrastructure are often the first casualties — right when coordination matters most. Most disaster-response apps assume a live connection to a central server: if that connection drops, reporting, resource matching, and volunteer coordination all stop working at the exact moment they're needed most. Separately, when connectivity does exist, most tools treat every incoming report as equally trustworthy and allocate resources by raw proximity, which systematically starves remote or late-reporting communities and leaves coordinators unable to explain why a decision was made.
 
-Most existing apps:
+Themes Selected:
 
-Depend on internet/cloud servers
-Don’t handle misinformation
-Allocate resources unfairly
-Cannot coordinate offline
 
-Research shows many disaster apps become inactive due to these limitations
-
-🌍 Themes Selected
-
-✅ Climate & Sustainability Systems
-
-✅ Public Systems, Governance and Civic Tech
-
-✅ Infrastructure, Mobility & Smart Systems
-
-✅ HealthTech & Bio Platforms
-
-✅ Developer Tools & Software Infrastructure
+Infrastructure, Mobility & Smart Systems
+Public Systems, Governance and Civic Tech
+Trust, Identity & Security
 
 
 🎯 Objective
 
-👥 Target Users
-First responders
-NGOs & volunteers
-Disaster victims
-Government coordination teams
+DisasterNet is a graph-native, offline-first coordination platform for disaster response.
 
 
-⚠️ Pain Points
-No communication during network failure
-Duplicate or fake reports
-Poor resource allocation
-Lack of coordination between teams
+Target users: first responders and volunteers in the field, relief coordinators managing multiple agencies, and affected residents submitting reports or requests.
+The pain point: existing tools collect reports but don't verify them, allocate resources by distance instead of fairness, and simply stop working when infrastructure goes down — the one condition every disaster guarantees.
+The value: a shared coordination graph (Neo4j) that scores report trust live, routes resources by fairness rather than proximity, explains every allocation decision, and keeps working — via local queuing and device-to-device relay — even with zero network infrastructure.
 
-
-Solution Value
-
-DisasterNet provides:
-
-
-📡 Offline-first communication
-
-🧠 Graph-based intelligence using Neo4j
-
-⚖️ Fair and explainable resource allocation
-
-🤖 AI-assisted triage and coordination
 
 🧠 Team & Approach
 
-👥 Team Name: BugSmashers
+Team Name: Bug Smashers
 
-GraphGuardians
-
-👨‍💻 Team Members
-Mariyam Arshiya – Full Stack / AI / Architecture
+Team Members:
 
 
-💡 Approach
-
-We chose this problem because:
-
-Disaster tech is underserved and critical
-Existing systems fail in real-world conditions
+Mariyam Arshiya — [https://www.linkedin.com/in/mariyam-arshiya-0a4ab9300 / https://github.com/Mariyam-Arshiya] — Full-stack, architecture, Neo4j graph design, ai developer
+Kirshipathi B - [https://github.com/kirishipathi/https://www.linkedin.com/in/kirishipathi-b-03250b328/]- development, Design architech, game developer, app developer
 
 
-🔥 Key Challenges Solved
-Offline data sync (no internet)
-Trust & misinformation handling
-Fair distribution of resources
-Multi-device coordination
+Your Approach:
 
-🚀 Breakthrough
 
-Instead of treating data as flat records, we modeled everything as a living graph:
-Reports, people, resources, and trust are all connected nodes
+Why this problem: 
+most hackathon disaster-tech submissions optimize for reporting and mapping — a crowded, largely solved space. Research into current academic work (graph-attention resource allocation, VGI trust scoring, off-grid mesh usability studies) surfaced three gaps almost nobody addresses: trust of crowd-sourced data, fairness of allocation, and survival of the coordination system itself once the network is gone. We built for those gaps specifically.
+Key challenges addressed: representing evolving trust and fairness as live graph properties instead of static scores; designing an offline-write model that doesn't silently lose or overwrite data when multiple devices reconnect; keeping the AI assistant multilingual and voice-first so it's usable by volunteers who aren't comfortable typing in English.
+Pivots/iterations: the resource allocation logic started as simple nearest-match, then moved to a fairness-weighted model after research showed proximity-only allocation reliably starves under-served clusters — a documented failure mode we designed around rather than discovered in testing.
+
 
 🛠️ Tech Stack
 
-💻 Core Technologies
-Layer	Tech
-Frontend	React (Vite), React Native (Expo)
-Backend	Node.js, Express
-Database	Neo4j AuraDB
-APIs	REST, Socket.IO
-Hosting	Render, Vercel
+Core Technologies Used:
 
-⚡ Additional Technologies
 
-🤖 AI / ML (on-device triage + Sarvam AI fallback)
-☁️
-Cloud (Render deployment)
+Frontend (Web): React, Vite, custom CSS (no UI framework — hand-built design system)
 
-📶 Offline-first architecture
+Frontend (Mobile): React Native, Expo, React Navigation
 
-🔗 Graph Data Science (Neo4j)
+Backend: Node.js, Express, Socket.IO
+
+Database: Neo4j AuraDB (graph-native trust scoring, fairness routing, and allocation metadata)
+
+APIs: Anthropic Claude (Field Assistant), Sarvam AI (voice, translation, triage reasoning)
+
+Hosting: Render (backend), Vercel (web), Expo Go / EAS (mobile)/netfliy
+
+
+Additional Technologies Used:
+
+
+AI / ML: Sarvam AI (Saaras v3 speech-to-text, Bulbul v3 text-to-speech, Mayura translation, Sarvam-30B/105B reasoning), 
+Claude (conversational field assistant)
+
+Offline-first data: AsyncStorage + NetInfo (mobile local queue), vector-clock-based conflict resolution (CRDT sync design)
+
 
 🏆 Sponsored Track
 
-🟢 Neo4j Track and Render
+
+☑ Neo4j Track — Uses AuraDB as primary database
+☑ Expo Track — Built using Expo
 
 
-We used Neo4j AuraDB as the core system:
+Neo4j implementation note: Neo4j isn't used as a generic data store — it's structural to three of the platform's core features. Reports and reporters form a graph where trust propagates through corroboration and geographic clustering (a lightweight PageRank-style score, recomputed as new reports arrive). Resources and demand clusters form a bipartite graph matched by a fairness-weighted function instead of nearest-distance. Every allocation decision writes its contributing factors as edge metadata, so coordinators can see why a decision was made, not just what it was.
 
-Graph-based report linking
-Trust propagation using PageRank-style scoring
-Resource allocation using graph relationships
-
-🟣 Expo Track
-Built mobile app using React Native Expo
-Offline-first UI + real-time updates
-
+Expo implementation note: the field app is built entirely on Expo/React Native, using React Navigation for the tab structure and Expo's managed workflow for fast iteration without native build tooling — critical for hackathon timelines.
 
 ✨ Key Features
 
-✅ 1. Trust-Weighted Report Graph
-Reports scored based on reliability
-Uses graph relationships instead of static ML
-Prevents misinformation spread
 
-✅ 2. Fairness-Aware Resource Allocation
-Prioritizes underserved areas
-Avoids bias of “nearest-first” allocation
-Uses graph-based scoring
 
-✅ 3. Offline Graph Sync (CRDT-based)
-Works without internet
-Syncs data when connectivity returns
-No data loss
+✅ Trust-Weighted Report Graph — misinformation resistance as a live, propagating graph score, not a static classifier
 
-✅ 4. AI Field Triage Assistant
-Works offline
-Guides responders step-by-step
-Converts results into structured graph data
+✅ Fairness-Aware Resource Router — allocation scored by severity and unmet-need duration, preventing remote clusters from being starved by nearest-first logic
 
-✅ 5. Duplicate & Ghost Request Detection
-Detects repeated or outdated requests
-Prevents wasted resources
+✅ Offline-First Field App — reports queue locally the instant signal drops and sync automatically when it returns (real device behavior, not simulated)
 
-✅ 6. Volunteer Assignment Engine
-Matches volunteers based on skills
-Balances workload intelligently
+✅ Explainable Allocation Trail — every routing decision stores a human-readable "why," not a black-box score
 
-✅ 7. Mesh Network Fallback
-Device-to-device communication
-Works with zero infrastructure
+✅ Multilingual Voice Reporting — Sarvam AI enables incident reporting and alerts in regional Indian languages, not just English
 
-✅ 8. Explainable Decisions
-Shows why a resource was allocated
-Builds trust with responders
+✅ Live Field Assistant — a working conversational assistant embedded in both the web and mobile app
 
 
 📽️ Demo & Deliverables
-🎥 Demo Video: 
-🌐 Deployment: 
+
+
+Demo Video Link (Mandatory): [screen-capture (3).webm](https://github.com/user-attachments/assets/f2c764ff-a01a-4c16-ada1-707553f89e6a)
+
+Deployment Link (Recommended): https://marvelous-mermaid-ab9552.netlify.app/
+Pitch Deck / PPT (Optional): [DisasterNet_Pitch_Deck.pptx](https://github.com/user-attachments/files/29942246/DisasterNet_Pitch_Deck.pptx)
+
 
 
 ✅ Tasks & Bonus Checklist
 
-✅ All team members completed social task
 
-⬜ Bonus Task 1
+☐ All team members completed the mandatory social task
 
-⬜ Bonus Task 2
+☐ Bonus Task 1 – Badge sharing<img width="800" height="1000" alt="HACKHAZARDS-BADGE (3)" src="https://github.com/user-attachments/assets/bc10a081-a3eb-4eb5-8812-5a5a75aa6b5c" />,<img width="800" height="1000" alt="HACKHAZARDS-BADGE (2)" src="https://github.com/user-attachments/assets/2f24c003-3ee1-4f16-99bb-bb57399f9676" />,<img width="800" height="1000" alt="HACKHAZARDS-BADGE (1)" src="https://github.com/user-attachments/assets/93a65457-848c-4324-ad46-978d07e5e1b5" />,<img width="800" height="1000" alt="HACKHAZARDS-BADGE" src="https://github.com/user-attachments/assets/53bc93cf-2486-492b-8a4d-bfbbd895def4" />
+
+☐ Bonus Task 2 – Blog/article
+
 
 🧪 How to Run the Project
 
-🔧 Requirements
-Node.js
-Neo4j AuraDB account
-Expo CLI
-🔑 Environment Variables
+Requirements:
 
-Create .env:
 
-NEO4J_URI=your_uri
-NEO4J_USER=neo4j
-NEO4J_PASSWORD=your_password
+Node.js 18+
+ 
+  Neo4j AuraDB instance (neo4j.com/cloud/aura-free)
+   
+   Sarvam AI API key 
 
-▶️ Backend
-cd disasternet-backend
+
+Local Setup:
+
+Backend:
+
+bashcd disasternet-backend
+npm install
+copy .env.example .env
+# fill in NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD in .env
+npm run seed
+npm run dev
+
+Web app:
+
+bashcd disasternet-web
 npm install
 npm run dev
 
-▶️ Frontend
-cd disasternet-web
-npm install
-npm run dev
+Mobile app:
 
-▶️ Mobile App
-cd disasternet-mobile
+bashcd disasternet-mobile
+npm install
 npx expo start
+
+# scan the QR code with Expo Go
 
 🧬 Future Scope
 
-📈 Integration with government APIs
 
-🛡️ Stronger encryption for mesh network
+📡 Resilient mesh fallback (BLE / Wi-Fi Direct relay) for true zero-infrastructure operation
 
-🌐 Multi-language support
+📈 Spontaneous volunteer assignment engine using published scheduling heuristics for large volunteer pools
 
-🧠 Advanced AI decision-making
+🛡️ End-to-end encryption on all relayed offline messages
 
-📊 Real-time disaster prediction
+🌐 Expansion of Sarvam AI language coverage and offline quantized model fallback for triage
+
+🔁 Duplicate/ghost-request detection across multiple agencies operating on the same incident
 
 
 📎 Resources / Credits
 
-Neo4j Graph Data Science
-Expo React Native
-Disaster research studies (2024–2026)
-Open-source libraries
+
+Neo4j AuraDB and Neo4j Graph Data Science library
+
+Sarvam AI (Saaras, Bulbul, Mayura, Sarvam-M model family)
+
+Research referenced: GAT_HRL (graph-attention + hierarchical RL for emergency resource allocation), VGI credibility scoring studies, CYREN off-grid communication usability research, ERTRIAGE on-device triage systems
 
 
 🏁 Final Words
 
-DisasterNet was built to solve a real-world critical problem  not just for a demo.
-
-We learned:
+Disasters, minutes matter. DisasterNet enables real-time, community-driven reporting and alerting to save lives.
 
 Systems must work in worst-case scenarios
+
 Data trust is as important as data itself
+
 Graph thinking unlocks powerful coordination
 
-“In disasters, communication is survival. DisasterNet ensures it never stops.”
-=======
-# DisasterNet — Unified Responsive App
-
-One React codebase. Same code renders as a mobile app (bottom tab bar, full-screen SOS) below 860px width, and as a desktop command dashboard (sidebar nav) above it. No separate mobile project.
-
-## Why this exists (read this before judging it as "just another disaster app")
-Most disaster-coordination apps do two things: collect reports, show them on a map. They don't verify which reports are true, they route resources by whoever's closest instead of whoever's waited longest, and they stop working entirely the moment the network drops — which is exactly when disasters make that happen. DisasterNet closes those three gaps specifically. Every claim below has its own tab in the running app, not just a slide — open it and click **"Why DisasterNet"** in the sidebar, or **"Watch 30-sec demo"** for a guided walkthrough that shows the trust score propagating and the resource queue reordering live.
-
-## What's real vs. simulated — stated plainly
-- **Live seismic layer (Map + Dashboard tabs)** — genuinely real. Pulled live from the USGS Earthquake Hazards Program public feed (`earthquake.usgs.gov`, no API key, refreshes every 5 min). Whatever count you see is whatever actually happened in the real world in the last 24 hours — independently checkable against usgs.gov directly.
-- **Incident reports (Map/Alerts/Trust Graph tabs)** — runs on local seed data plus a live simulation engine that generates a new incident every ~7s, clearly labeled "SIMULATED LIVE FEED" in the ticker. This is intentional and honest: it's standing in for the Neo4j backend feed until you connect it (see below) — connect the backend and the same UI switches to "LIVE — connected to Neo4j backend" with zero code changes.
-- **Trust scores, fairness ranking, AI tagging** — all real, working logic (Cypher-style scoring, keyword classifier, haversine distance), not hardcoded numbers. See `src/data/aiTagging.js` and `src/components/TrustGraph.jsx`.
-
-## What's working right now, no setup required
-- **Live map** — OpenStreetMap dark tiles (free, no API key), incident markers, safe zones, heatmap toggle, **and a real live earthquake layer from USGS**
-- **Send SOS** — one tap or voice ("Speak your report" — browser's built-in Web Speech API, Chrome/Edge)
-- **Report an incident** — fast bottom-sheet UI, live AI tagging as you type
-- **Resources tab** — fairness-ranked queue with a visible explanation for why each request is ordered where it is (not a black box)
-- **Smart nearby alerts** — sorts the live feed by real distance from your browser's geolocation
-- **Offline fallback** — turn off your network, submit a report, it queues in localStorage; comes back online, it's ready to sync
-- **Trust graph (Neo4j)** — force-style visualization of the report/corroboration graph, labeled live vs. local depending on whether your backend is reachable
-- **Guided 30-second demo** (`ScenarioDemo.jsx`) — story-style walkthrough auto-plays on first login, tap to pause/replay
-- **"Why DisasterNet" panel** — the problem statement and the three gaps, one tap away, always in the sidebar
-- **Role-based UI** — Resident / Volunteer / Responder / Coordinator at login
-- **Dashboard** — live-computed stats, not hardcoded numbers
-
-## Run it
-```bash
-npm install
-cp .env.example .env
-npm run dev
-```
-Open `http://localhost:5173`. Resize your browser below 860px (or open dev tools device mode) to see it switch to the mobile layout — same code, no reload.
-
-## Connect Neo4j (this is the `disasternet-backend` project from earlier)
-Point `.env`'s `VITE_API_BASE` at wherever that backend is running (`http://localhost:4000` locally, or your Render URL once deployed):
-1. `npm run seed` in the backend to populate Neo4j
-2. `npm run dev` in the backend
-3. Reload this app — Dashboard switches to "Live — connected to Neo4j backend", Trust Graph tab says "LIVE FROM NEO4J AURADB"
-
-Until you do that, the app runs on local seed data plus the simulation engine — it will never crash or show a hard error either way; every network call in this app is wrapped and degrades silently.
-
-## Deploy
-- **Vercel** (recommended): push to GitHub, import at vercel.com — auto-detects Vite. Add `VITE_API_BASE` as an environment variable pointing at your deployed backend.
-- **Netlify**: `npm run build`, publish directory `dist`.
-
-## Push to GitHub
-```bash
-git init
-git add .
-git commit -m "DisasterNet unified responsive app"
-git branch -M main
-git remote add origin https://github.com/Mariyam-Arshiya/DisasterNet.git
-git push -u origin main --force
-```
-`--force` is there because this replaces whatever's currently in the repo. Drop it if you want to merge instead of overwrite.
->>>>>>> b44f3c7 (Initial commit)
+In disasters, communication is survival. DisasterNet ensures it never stops.
