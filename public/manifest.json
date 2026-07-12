@@ -1,0 +1,8 @@
+{
+  "name": "DisasterNet",
+  "short_name": "DisasterNet",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0B0A0C",
+  "theme_color": "#0B0A0C"
+}

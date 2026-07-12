@@ -1,0 +1,47 @@
+* { box-sizing: border-box; }
+body { margin: 0; background: #0B0A0C; }
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-thumb { background: #2E1D1F; border-radius: 8px; }
+
+.spin { animation: dn-spin 1s linear infinite; }
+@keyframes dn-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+@keyframes dn-fadein-up { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+.dn-fadein-up { opacity: 0; animation: dn-fadein-up 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+@keyframes dn-fadein { from { opacity: 0; } to { opacity: 1; } }
+.dn-fadein { animation: dn-fadein 0.4s ease forwards; }
+
+@keyframes dn-slide-in-left { from { opacity: 0; transform: translateX(-16px); } to { opacity: 1; transform: translateX(0); } }
+.dn-slide-in-left { animation: dn-slide-in-left 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+.dn-press { transition: transform 0.12s ease; }
+.dn-press:active { transform: scale(0.95); }
+
+@keyframes dn-ring {
+  0% { transform: scale(1); opacity: 0.5; }
+  100% { transform: scale(1.9); opacity: 0; }
+}
+.dn-sos-ring {
+  position: absolute; inset: 0; border-radius: 14px;
+  border: 2px solid #E5342A; animation: dn-ring 1.6s ease-out infinite;
+  pointer-events: none;
+}
+.dn-sos-ring.delay { animation-delay: 0.8s; }
+
+@keyframes dn-tab-content { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+.dn-tab-content { animation: dn-tab-content 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
+
+.dn-nav-item { position: relative; transition: color 0.2s ease, background 0.2s ease; }
+
+@keyframes dn-pulse-dot {
+  0%, 100% { opacity: 1; } 50% { opacity: 0.35; }
+}
+.dn-live-dot { animation: dn-pulse-dot 1.8s ease-in-out infinite; }
+
+@keyframes dn-sheet-up { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+.dn-sheet-up { animation: dn-sheet-up 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+
+@keyframes dn-backdrop-in { from { opacity: 0; } to { opacity: 1; } }
+.dn-backdrop-in { animation: dn-backdrop-in 0.25s ease; }
